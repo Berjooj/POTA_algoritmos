@@ -9,17 +9,16 @@ void heapSort(int *vetor, int n);
 
 void bubbleSort(int *vetor, int n);
 
+void lerArquivo(int *vetor);
+
 int main() {
-	int vetor_bubble[] = {56, 29, 2, 64, 8, 39, 29, 16, 47, 23, 6, 22, 13, 27, 34};
-	int vetor_heap[] = {56, 29, 2, 64, 8, 39, 29, 16, 47, 23, 6, 22, 13, 27, 34};
-	int n = sizeof(vetor_heap) / sizeof(vetor_heap[0]);
+	int n = 5000;
 
-	printf("Vetor original:\n");
+	int vetor_bubble[n];
+	int vetor_heap[n];
 
-	for (int i = 0; i < n; i++)
-		printf("[%2d]", vetor_bubble[i]);
-
-	printf("\n");
+	lerArquivo(vetor_bubble);
+	lerArquivo(vetor_heap);
 
 	// Anotar o tempo de execucao
 	clock_t t;
@@ -30,7 +29,7 @@ int main() {
 	t = clock() - t;
 	double tempo = ((double)t) / CLOCKS_PER_SEC;
 
-	printf("\n\nTempo de processamento do BubbleSort: %f segundos\n", tempo);
+	printf("Tempo de processamento do BubbleSort: %f segundos\n", tempo);
 
 	t = clock();
 
@@ -45,6 +44,25 @@ int main() {
 	getch();
 
 	return 0;
+}
+
+void lerArquivo(int *vetor) {
+	FILE *arquivo;
+	int n = sizeof(vetor) / sizeof(int);
+
+	arquivo = fopen("Numeros Aleatorios nao Repetidos.txt", "r");
+
+	if (arquivo == NULL) {
+		printf("Erro ao abrir o arquivo\n");
+		exit(1);
+	}
+
+	while (!feof(arquivo)) {
+		fscanf(arquivo, "%d", &vetor[n]);
+		n++;
+	}
+
+	fclose(arquivo);
 }
 
 /**
@@ -62,10 +80,6 @@ void bubbleSort(int *vetor, int n) {
 			}
 		}
 	}
-
-	printf("\nVetor Ordenado:\n");
-	for (int i = 0; i < n; i++)
-		printf("[%2d]", vetor[i]);
 }
 
 void heapify(int *vetor, int n, int i) {
@@ -111,8 +125,4 @@ void heapSort(int *vetor, int n) {
 		// Reorganiza a arvore heap binaria
 		heapify(vetor, i, 0);
 	}
-
-	printf("\nVetor Ordenado:\n");
-	for (int i = 0; i < n; i++)
-		printf("[%2d]", vetor[i]);
 }
